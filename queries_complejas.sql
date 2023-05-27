@@ -30,3 +30,11 @@ SELECT gn.name, SUM(ivl.quantity) AS veces_comprado FROM genre AS gn
 GROUP BY gn.name
 HAVING SUM(ivl.quantity) BETWEEN 40 AND 1000
 ORDER BY veces_comprado DESC;
+
+-- Ejercicio 7
+-- Clientes que han comprado una canción de más de 3 minutos y que son de Estados Unidos (USA)
+SELECT cust.first_name, cust.last_name, tr.name, (tr.milliseconds / 1000) duracion_en_s FROM customer AS cust
+	JOIN invoice AS iv ON cust.customer_id = iv.customer_id
+	JOIN invoice_line AS ivl ON iv.invoice_id = ivl.invoice_id
+	JOIN track AS tr ON ivl.track_id = tr.track_id
+WHERE cust.country LIKE 'USA' AND tr.milliseconds >= 180000;
