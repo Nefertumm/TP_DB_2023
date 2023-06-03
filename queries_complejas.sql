@@ -23,7 +23,8 @@ WHERE NOT EXISTS (
   )
 );
 
--- Las canciones agrupadas por géneros que hayan sido vendidos más de 40 veces pero menos de 1000 veces.
+-- Las canciones agrupadas por géneros que hayan sido vendidos más de 40
+-- veces pero menos de 1000 veces.
 SELECT gn.name, SUM(ivl.quantity) AS veces_comprado FROM genre AS gn
 	JOIN track AS tr ON gn.genre_id = tr.genre_id
 	JOIN invoice_line AS ivl ON tr.track_id = ivl.track_id
