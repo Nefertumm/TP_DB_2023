@@ -40,4 +40,28 @@ FROM customer AS cust
 	JOIN invoice_line AS ivl ON iv.invoice_id = ivl.invoice_id
 	JOIN track AS tr ON ivl.track_id = tr.track_id
 	JOIN genre AS gn ON tr.genre_id = gn.genre_id
-WHERE cust.country LIKE 'USA' AND tr.milliseconds >= 180000;
+WHERE cust.country = 'USA' AND tr.milliseconds >= 180000;
+
+-- Consulta optimizada por álgebra relacional
+SELECT CS7.first_name, CS7.last_name, CS7.name, CS7.duracion_en_s, CS8.genre_name
+FROM
+	(SELECT CS5.first_name, CS5.last_name, CS6.track_id, CS6.genre_id, CS6.name, CS6.duracion_en_s FROM
+		(SELECT CS3.first_name, CS3.last_name, CS4.track_id 
+		FROM
+			(SELECT CS1.first_name, CS1.last_name, CS2.invoice_id 
+			FROM 
+				(SELECT cust.customer_id, cust.first_name, cust.last_name 
+				FROM customer AS cust
+				WHERE cust.country = 'USA') AS CS1,
+				(SELECT iv.customer_id, iv.invoice_id
+				FROM invoice AS iv) AS CS2
+			WHERE SC1.customer_id = SC2.customer_id) AS CS3,
+			(SELECT ivl.invoice_id, ivl.track_id
+			FROM invoice_line AS ivl) AS CS4
+		WHERE CS3.invoice_id = CS4.invoice_id) AS CS5,
+		(SELECT tr.track_id, tr.genre_id, tr.name, (tr.milliseconds / 1000) AS duracion_en_s
+		FROM track AS tr
+		WHERE tr.milliseconds >= 180000) AS CS6
+	WHERE CS5.track_id = CS6.track_id) AS CS7,
+	(SELECT gn.genre_id, gn.name AS genre_name FROM genre AS gn) AS CS8
+WHERE CS7.genre_id = CS8.genre_id;
