@@ -55,7 +55,7 @@ FROM
 				WHERE cust.country = 'USA') AS CS1,
 				(SELECT iv.customer_id, iv.invoice_id
 				FROM invoice AS iv) AS CS2
-			WHERE SC1.customer_id = SC2.customer_id) AS CS3,
+			WHERE CS1.customer_id = CS2.customer_id) AS CS3,
 			(SELECT ivl.invoice_id, ivl.track_id
 			FROM invoice_line AS ivl) AS CS4
 		WHERE CS3.invoice_id = CS4.invoice_id) AS CS5,
