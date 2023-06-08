@@ -34,13 +34,14 @@ ORDER BY veces_comprado DESC;
 
 -- Ejercicio 7
 -- Clientes que han comprado una canción de más de 3 minutos y que son de Estados Unidos (USA)
+--          A1        ,       A2      ,    A3  ,                  A4                   ,   A5
 SELECT cust.first_name, cust.last_name, tr.name, (tr.milliseconds / 1000) duracion_en_s, gn.name 
 FROM customer AS cust
-	JOIN invoice AS iv ON cust.customer_id = iv.customer_id
-	JOIN invoice_line AS ivl ON iv.invoice_id = ivl.invoice_id
-	JOIN track AS tr ON ivl.track_id = tr.track_id
-	JOIN genre AS gn ON tr.genre_id = gn.genre_id
-WHERE cust.country = 'USA' AND tr.milliseconds >= 180000;
+	JOIN invoice AS iv ON cust.customer_id = iv.customer_id -- C6
+	JOIN invoice_line AS ivl ON iv.invoice_id = ivl.invoice_id -- C5
+	JOIN track AS tr ON ivl.track_id = tr.track_id -- C4
+	JOIN genre AS gn ON tr.genre_id = gn.genre_id -- C3
+WHERE cust.country = 'USA' AND tr.milliseconds >= 180000; -- C1, C2
 
 -- Consulta optimizada por álgebra relacional
 SELECT CS7.first_name, CS7.last_name, CS7.name, CS7.duracion_en_s, CS8.genre_name
